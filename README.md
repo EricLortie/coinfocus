@@ -2,6 +2,8 @@
 
 This app exists to track cryptocurrency prices and social media & news mentions. I started doing this with an eye towards building up a meaningful quantity of data in order to make machine learning predictions on the prices of cryptocurrencies. While putting together the infrastructure to gather this data I decided it would be worthwhile to also surface this data in a web app, maybe with an eye towards charging subscriptions for access to the data. The app is hosted on Heroku, with an average monthly cost between 100$ and 700$, depending on where I've been in the development phase.
 
+The URL for the site is http://coinfocus.io
+
 
 ## Important Notes:
 
