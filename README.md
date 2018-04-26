@@ -20,6 +20,8 @@ This is a hobby project. I'm not sure of the total hours I've put into it. I sta
 
 2. /lib/worker_module.rb is the main workhorse for the whole project. Future iterations of the project
 
+3. Good use of caching and cache pre-heating. The method which updated the latest snapshot values, when all was said and done, would curl the URLs for the more popular coins in order to prebuild the cache and prevent excessive load times.
+
 ## What needs work?
 
 1. Code isn't as DRY as it should be, especially with the views. I need to build some more partials.
