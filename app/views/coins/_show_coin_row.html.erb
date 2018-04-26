@@ -1,0 +1,252 @@
+
+  <div class="coinRow indexCoinRow row" coin-id="<%= coin.id %>">
+    <div class="col-sm-12"><div class="row coinHeaderRow">
+      <div class="coinListSubCell coinNameCell col-sm-4">
+        <a href="/crypto/<%=coin.short_name%>">
+          <img class="coin-icon" src="<%= coin["image_url"] %>" /><%= coin["full_name"] %> (<%= coin["short_name"] %>)
+        </a><%= "&nbsp;<a href='/show_coin_from_prod/#{coin.id}'>!</a>".html_safe if (!current_user.blank? and current_user.admin?) %>
+        <div class="coin_meta">
+          <span class="utc_time" data-utc-time='<%= convert_moment(snapshot.updated_at.utc) rescue "" %>'><%= snapshot.updated_at %></span>
+          <span class="utc_time" style="display:none" data-utc-time='<%= convert_moment(snapshot.time_collected.utc) rescue "" %>'><%= snapshot.time_collected %></span>
+        </div>
+      </div>
+      <div class="coinListSubCell col-sm-3">
+        <div class="row">
+          <div class="coinListSubLabel col-xs-6 col-sm-12">Circulating</div>
+          <div class="coinListSubValue coinTableHeader col-xs-6 col-sm-12"><%= (clean_num_value(snapshot.circulating.to_f) rescue "") %></div>
+        </div>
+      </div>
+      <div class="coinListSubCell col-sm-3">
+        <div class="row">
+          <div class="coinListSubLabel col-xs-6 col-sm-12">Trending <%= trend_indicator(snapshot.trending_up) %></div>
+          <% (trending_time = snapshot.trending_since.utc rescue "N/A") %>
+          <div class="coinListSubValue coinTableHeader col-xs-6 col-sm-12">Since: <span class="utc_time" data-utc-time='<%= convert_moment(trending_time) %>'><%= trending_time %></span></div>
+        </div>
+      </div>
+    </div>
+
+      <div class="row"><div class="coinListChange col-sm-3 coinDataElement">
+        <div class="row partial_data_header">
+          <div class="coinListSubCell coinListSubLabel col-xs-6 col-sm-12">Value</div>
+          <div class="coinListSubCell coinListSubValue coinTableHeader col-xs-6 col-sm-12"><%= (clean_num_value(snapshot.price.to_f) rescue "0") %> (USD)</div>
+        </div>
+        <div class="row coin_data_table">
+          <div class="col-xs-3 col-md-12">
+            <div class="row">
+              <div class="coinListSubValue col-sm-12">
+                1 Hour:<br/>
+                <span class="nowrap">
+                  <%= pct_change_indicator(snapshot.price_change_pct_60m) %>
+                  <%= (number_with_precision(snapshot.price_change_pct_60m.to_f.abs, precision: 2, delimiter: ',')) %>%
+                </span><br/>
+                 ($<%= (number_with_precision(snapshot.price_change_60m, :precision => 2)) %>)
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-3 col-md-12">
+            <div class="row">
+              <div class="coinListSubValue col-sm-12">
+                24 Hours:<br/>
+                <span class="nowrap">
+                  <%= pct_change_indicator(snapshot.price_change_pct_24) %>
+                  <%= (number_with_precision(snapshot.price_change_pct_24.to_f.abs, precision: 2, delimiter: ',')) %>%
+                </span><br/>
+                ($<%= (number_with_precision(snapshot.price_change_24, :precision => 2)) %>)
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-3 col-md-12">
+            <div class="row">
+              <div class="coinListSubValue col-sm-12">
+                1 week: <br/>
+                <span class="nowrap">
+                  <%= pct_change_indicator(snapshot.price_change_pct_1_week) %>
+                  <%= (number_with_precision(snapshot.price_change_pct_1_week.to_f.abs, precision: 2, delimiter: ',')) %>%
+                </span><br/>
+                 ($<%= (number_with_precision(snapshot.price_change_1_week, :precision => 2)) %>)
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-3 col-md-12">
+            <div class="row">
+              <div class="coinListSubValue col-sm-12">
+                1 month:<br/>
+                <span class="nowrap">
+                  <%= pct_change_indicator(snapshot.price_change_pct_1_month) %>
+                  <%= number_with_precision(snapshot.price_change_pct_1_month.to_f.abs, precision: 2, delimiter: ',') %>%
+                </span><br/>
+                 ($<%= (number_with_precision(snapshot.price_change_1_month, :precision => 2)) %>)
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><div class="coinListValue col-sm-3 coinDataElement">
+        <div class="row partial_data_header">
+          <div class="coinListSubCell coinListSubLabel col-xs-6 col-sm-12">Market Cap</div>
+          <div class="coinListSubCell coinListSubValue coinTableHeader col-xs-6 col-sm-12"><%= (clean_num_value(snapshot.market_cap.to_f) rescue "0") %> (USD)</div>
+        </div>
+        <div class="row coin_data_table">
+         <div class="col-xs-3 col-md-12">
+           <div class="row">
+             <div class="coinListSubValue col-sm-12">
+               1 Hour:<br/>
+               <span class="nowrap">
+                 <%= pct_change_indicator(snapshot.mc_change_pct_60m) %>
+                 <%= (clean_num_value(snapshot.mc_change_pct_60m.to_f.abs)) %>%
+               </span><br/>
+               ($<%= (clean_num_value(snapshot.mc_change_60m.to_f)) %>)
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-3 col-md-12">
+          <div class="row">
+            <div class="coinListSubValue col-sm-12">
+              24 Hours:<br/>
+              <span class="nowrap">
+                <%= pct_change_indicator(snapshot.mc_change_pct_24) %>
+                <%= (clean_num_value(snapshot.mc_change_pct_24.to_f.abs)) %>%
+              </span><br/>
+              ($<%= (clean_num_value(snapshot.mc_change_24.to_f)) %>)
+           </div>
+         </div>
+       </div>
+         <div class="col-xs-3 col-md-12">
+           <div class="row">
+             <div class="coinListSubValue col-sm-12">
+                <% unless snapshot.mc_change_pct_1_week.blank? %>
+                  1 Week:<br/>
+                  <span class="nowrap">
+                    <%= pct_change_indicator(snapshot.mc_change_pct_1_week) %>
+                    <%= (clean_num_value(snapshot.mc_change_pct_1_week.to_f.abs)) %>%
+                  </span><br/>
+                  ($<%= (clean_num_value(snapshot.mc_change_1_week.to_f)) %>)
+                <% end %>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-3 col-md-12">
+          <div class="row">
+            <div class="coinListSubValue col-sm-12">
+              <% unless snapshot.mc_change_pct_1_month.blank? %>
+                1 Month:<br/>
+                <span class="nowrap">
+                  <%= pct_change_indicator(snapshot.mc_change_pct_1_month) %>
+                  <%= (clean_num_value(snapshot.mc_change_pct_1_month.to_f.abs)) %>%
+                </span><br/>
+                ($<%= (clean_num_value(snapshot.mc_change_1_month.to_f)) %>)
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><div class="coinListMarket col-sm-3 coinDataElement">
+        <% if snapshot.volume_24_to == 0.0 %>
+
+          <div class="row partial_data_header">
+            <div class="coinListSubCell coinListSubLabel col-xs-6 col-sm-12">Volume</div>
+            <div class="coinListSubCell coinListSubValue coinTableHeader col-xs-6 col-sm-12">Data Coming Soon</div>
+          </div>
+
+        <% else %>
+          <div class="row partial_data_header">
+            <div class="coinListSubCell coinListSubLabel col-xs-6 col-sm-12">Volume</div>
+            <div class="coinListSubCell coinListSubValue coinTableHeader col-xs-6 col-sm-12"><%= (clean_num_value(snapshot.volume_24_to.to_f) rescue "0") %> (USD)</div>
+          </div>
+          <div class="row coin_data_table">
+           <div class="col-xs-3 col-md-12">
+             <div class="row">
+               <div class="coinListSubValue col-sm-12">
+                 1 Hour:<br/>
+                 <span class="nowrap">
+                   <%= pct_change_indicator(snapshot.vol_change_pct_60m) %>
+                   <%= (clean_num_value(snapshot.vol_change_pct_60m.to_f.abs)) %>%
+                 </span><br/>
+                 ($<%= (clean_num_value(number_with_precision(snapshot.vol_change_60m, :precision => 2).to_f)) %>)
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-3 col-md-12">
+            <div class="row">
+              <div class="coinListSubValue col-sm-12">
+                24 Hours: <br/>
+                <span class="nowrap">
+                  <%= pct_change_indicator(snapshot.vol_change_pct_24) %>
+                  <%= (clean_num_value(snapshot.vol_change_pct_24.to_f.abs)) %>%
+                </span><br/>
+                ($<%= (clean_num_value(number_with_precision(snapshot.vol_change_24, :precision => 2).to_f)) %>)
+             </div>
+           </div>
+         </div>
+           <div class="col-xs-3 col-md-12">
+             <div class="row">
+               <div class="coinListSubValue col-sm-12">
+                <% unless snapshot.vol_change_pct_1_week.blank? %>
+                  1 Week:<br/>
+                  <span class="nowrap">
+                    <%= pct_change_indicator(snapshot.vol_change_pct_1_week) %>
+                    <%= (clean_num_value(snapshot.vol_change_pct_1_week.to_f.abs)) %>%
+                  </span><br/>
+                  ($<%= (clean_num_value(number_with_precision(snapshot.vol_change_1_week, :precision => 2).to_f)) %>)
+                <% end %>
+             </div>
+           </div>
+         </div>
+         <div class="col-xs-3 col-md-12">
+           <div class="row">
+             <div class="coinListSubValue col-sm-12">
+                  <% unless snapshot.vol_change_pct_1_month.blank? %>
+                    1 Month:<br/>
+                    <span class="nowrap">
+                      <%= pct_change_indicator(snapshot.vol_change_pct_1_month) %>
+                      <%= (clean_num_value(snapshot.vol_change_pct_1_month.to_f.abs)) %>%
+                    </span><br/>
+                    ($<%= (clean_num_value(number_with_precision(snapshot.vol_change_1_month, :precision => 2).to_f)) %>)
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div><div class="coinListMarket col-sm-3 coinDataElement">
+        <div class="row coin_data_table">
+          <div class="col-xs-12">
+            <table class="social-data-table">
+              <tr>
+                <th scope="row"></th>
+                <th><a href="<%= coin.reddit_link %>"><i class="fab fa-reddit" aria-hidden="true"></i></a></th>
+                <th><a href="<%= coin.twitter_link %>"><i class="fab fa-twitter" aria-hidden="true"></i></a></th>
+                <th><a href="<%= coin.news_link %>"><i class="far fa-newspaper" aria-hidden="true"></i> News</a></th>
+              </tr>
+              <tr>
+                <th class="text-column" scope="row">15m</td>
+                <td class="align-left"><%= snapshot.reddit_15m %></td>
+                <td class="align-left"><%= snapshot.twitter_15m %></td>
+                <td class="align-left"><%= snapshot.news_15m %></td>
+              </tr>
+              <tr>
+                <td class="text-column" scope="row">30m</td>
+                <td class="align-left"><%= snapshot.reddit_30m %></td>
+                <td class="align-left"><%= snapshot.twitter_30m %></td>
+                <td class="align-left"><%= snapshot.news_30m %></td>
+              </tr>
+              <tr>
+                <td class="text-column" scope="row">60m</td>
+                <td class="align-left"><%= snapshot.reddit_60m %></td>
+                <td class="align-left"><%= snapshot.twitter_60m %></td>
+                <td class="align-left"><%= snapshot.news_60m %></td>
+              </tr>
+              <tr>
+                <td class="text-column" scope="row">24h</td>
+                <td class="align-left"><%= snapshot.reddit_24h %></td>
+                <td class="align-left"><%= snapshot.twitter_24h %></td>
+                <td class="align-left"><%= snapshot.news_24h %></td>
+              </tr>
+            </table>
+
+         </div>
+
+       </div>
+      </div>
+      </div>
+    </div>
+  </div>

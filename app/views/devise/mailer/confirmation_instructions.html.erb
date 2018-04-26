@@ -1,0 +1,9 @@
+<p>Welcome to CoinFocus, <%= @email %>!</p>
+
+<h3>CoinFocus is currently in a free beta</h3>
+
+<p>Features & functionality may change without warning. Stay tuned for exciting updates as we finalize our platform.</p>
+
+<p>You can confirm your account email through the link below:</p>
+
+<p><%= link_to 'Confirm my account', confirmation_url(@resource, confirmation_token: @token) %></p>

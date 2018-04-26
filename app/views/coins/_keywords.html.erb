@@ -1,0 +1,49 @@
+<div id="coin-<%= timeframe %>-keywords" class="coin-graph tab-pane fade in">
+  <canvas id="<%= "#{timeframe}-#{coin.id}" %>Keywords" width="400" height="300"></canvas>
+  <%
+    opts = {:unit => "minute", :format =>"minute"} if timeframe=="halfhour"
+    opts = {:unit => "minute", :format =>"minute"} if timeframe=="hour"
+    opts = {:unit => "hour", :format =>"hour"} if timeframe=="day"
+    opts = {:unit => "day", :format =>"day"} if timeframe=="week"
+    opts = {:unit => "day", :format =>"day"} if timeframe=="month"
+    opts = {:unit => "month", :format =>"month"} if timeframe=="year"
+  %>
+  <script>
+
+    var ctx = document.getElementById("<%= "#{timeframe}-#{coin.id}" %>Keywords").getContext('2d');
+    var colors = fetch_bg_colors(<%= keyword_data[timeframe.to_sym][:labels].length %>);
+    var chartData = {
+      labels: <%= keyword_data[timeframe.to_sym][:labels].to_json.html_safe %>,
+      datasets: [
+        {
+          data: <%= keyword_data[timeframe.to_sym][:data] %>,
+          backgroundColor: colors,
+          borderColor: "black",
+          borderWidth: 2
+        }
+      ]
+    };
+
+    var chartOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      rotation: -Math.PI,
+      cutoutPercentage: 30,
+      circumference: Math.PI,
+      legend: {
+        position: 'left'
+      },
+      animation: {
+        animateRotate: false,
+        animateScale: true
+      }
+    };
+
+    var myChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: chartData,
+      options: chartOptions
+    });
+
+  </script>
+</div>

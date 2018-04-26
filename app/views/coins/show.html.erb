@@ -1,0 +1,110 @@
+<% provide(:title, @meta_title) %>
+<%= javascript_pack_tag 'application' %>
+<%= javascript_include_tag "jquery", "data-turbolinks-track" => true %>
+<%= javascript_include_tag "chart", "data-turbolinks-track" => true %>
+<%= javascript_include_tag "coin", "data-turbolinks-track" => true %>
+<%
+  records = {}
+
+  cache "coin_show #{@coin.id} #{ENV['HEROKU_RELEASE_VERSION']} #{(!current_user.blank? and current_user.admin?)} #{Time.now.utc.to_f if Rails.env.development?}", expires_in: 60.minutes do
+
+  coin_chart_data = {
+    :day => @snapshot.daily_chart_data,
+    :week => @snapshot.weekly_chart_data,
+    :month => @snapshot.monthly_chart_data,
+    :year => @snapshot.yearly_chart_data
+  } rescue @coin.coin_chart_data
+  #
+  # # social_chart_data = {
+  # #   :day => @snapshot.daily_social_data,
+  # #   :week => @snapshot.weekly_social_data,
+  # #   :month => @snapshot.monthly_social_data,
+  # #   :year => @snapshot.yearly_social_data
+  # # }
+  #
+  keyword_data = @snapshot.keyword_data # (!current_user.blank? and current_user.admin?) ? @coin.keyword_data : @snapshot.keyword_data
+
+%>
+<div id="dataTable">
+
+      <%= render :partial => 'show_coin_row', :locals => {:coin => @coin, :snapshot => @snapshot} %>
+
+</div>
+
+<div class="row">
+  <div class="col-sm-12">
+    <ul class="nav nav-tabs d-flex d-inline-flex">
+      <li class="active d-inline-flex align-items-center"><a href="#" data-target="#coin-charts" data-toggle="tab">Info</a></li>
+      <li class=" d-inline-flex align-items-center"><a href="#" data-target="#coin-news" data-toggle="tab">News</a></li>
+      <li class=" d-inline-flex align-items-center"><a href="#" data-target="#coin-social" data-toggle="tab">Social</a></li>
+      <% if (!current_user.blank? and current_user.admin?) %><li class=" d-inline-flex align-items-center"><a href="#" data-target="#coin-keywords" data-toggle="tab">Keywords</a></li><% end %>
+    </ul>
+    <div class="tab-content subtab">
+      <div id="coin-charts" class="coinListCharts showCoinRow tab-pane fade in active">
+
+        <div class="col-sm-5">
+          <div id="updates_container" class="row">
+            <div class="col-sm-12">
+              <%=
+                @notifications = @coin.recent_notifications
+                @identifier = @coin.short_name
+                render :partial => 'notifications/recent'
+              %>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-7">
+          <ul class="nav nav-tabs d-flex d-inline-flex">
+            <li class="active d-inline-flex align-items-center"><a href="#" class="default-tab" data-target="#coin-day-graph<%= @coin.id %>" data-toggle="tab">Day</a></li>
+            <li class=" d-inline-flex align-items-center"><a href="#" data-target="#coin-week-graph<%= @coin.id %>" data-toggle="tab">Week</a></li>
+            <li class=" d-inline-flex align-items-center"><a href="#" data-target="#coin-month-graph<%= @coin.id %>" data-toggle="tab">Month</a></li>
+            <li class=" d-inline-flex align-items-center"><a href="#" data-target="#coin-year-graph<%= @coin.id %>" data-toggle="tab">Year</a></li>
+          </ul>
+          <div class="tab-content">
+            <% ["day", "week", "month", "year"].each do |chart| %>
+              <%= render :partial => 'chart', :locals => {:coin => @coin, :coin_chart_data => coin_chart_data, :stackcharts => true, :show_social => true, :show_multi => true, :chart => chart, :is_active_class => "#{"active" if chart == 'day'}"} %>
+              <!--<div id="chart-<%=chart%>" class="chart-tab tab-pane fade in <%= chart=="day" ? "active" : "" %>"></div>-->
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <div id="coin-news" class="tab-pane fade in row">
+
+        <%= render :partial => 'social_mentions/social_list', :locals => { :coin_social_mentions => @coin_news, :content_type => "news"} %>
+
+      </div>
+      <div id="coin-social" class="tab-pane fade in row">
+
+        <%= render :partial => 'social_mentions/social_list', :locals => { :coin_social_mentions => @coin_social_mentions, :content_type => "social_media"} %>
+
+      </div>
+
+      <div id="coin-keywords" class="showCoinRow tab-pane fade in">
+
+        <ul class="nav nav-tabs nav-justified">
+          <li class="active"><a href="#" data-target="#chart-halfhour" data-toggle="tab">Last 30 mins</a></li>
+          <li><a href="#" data-target="#keywords-hour" data-toggle="tab">Last Hour</a></li>
+          <li><a href="#" data-target="#keywords-day" data-toggle="tab">Last Day</a></li>
+          <li><a href="#" data-target="#keywords-week" data-toggle="tab">Last Week</a></li>
+          <li><a href="#" data-target="#keywords-month" data-toggle="tab">Last Month</a></li>
+          <li><a href="#" data-target="#keywords-year" data-toggle="tab">Last Year</a></li>
+        </ul>
+        <div class="tab-content keywords">
+          <% ["halfhour", "hour", "day"].each do |timeframe|
+            next unless (!current_user.blank? and current_user.admin?) # Let's skip this for now
+          %>
+            <div id="keywords-<%=timeframe%>" class="tab-pane fade in <%= timeframe=="halfhour" ? "active" : "" %>">
+
+                <%= render :partial => 'keywords', :locals => {:coin => @coin, :timeframe => timeframe, :keyword_data => keyword_data, :stackcharts => true} if keyword_data[timeframe.to_sym].presence %>
+
+            </div>
+          <% end unless keyword_data.blank? %>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+<% end %>

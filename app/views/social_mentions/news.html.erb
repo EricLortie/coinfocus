@@ -1,0 +1,19 @@
+<% provide(:title, "Recent News for Top Cryptocurrencies") %>
+<section class="dark-bg">
+  <div class="container">
+  	<div class="row">
+      <div class="col-sm-12">
+        <h1>Recent News About Cryptocurrencies</h1>
+        <p>These articles are fetched automatically from thousands of news sites.
+          We're always working towards ensuring that they're as relevant as possible.
+        </p>
+        <h4>Coinfocus does not endorse the views displayed in these articles. These articles are automatically curated and displayed here.</h4>
+      </div>
+    </div>
+    <div class="row">
+
+        <%= render :partial => 'social_mentions/social_list', :locals => { :coin_social_mentions => @coin_social_mentions, :content_type => "news"} %>
+
+    </div>
+  </div>
+</section>

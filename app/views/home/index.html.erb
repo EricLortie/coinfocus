@@ -1,0 +1,142 @@
+<!-- /.intro section -->
+<section id="intro">
+	<div class="container">
+		<div class="row">
+
+			<!-- /.intro content -->
+			<div class="col-md-offset-8 col-md-4 col-sm-offset-1 col-sm-10 wow slideInRight intro-text">
+				<h2>Access comprehensive cryptocurrency price data & social analytics</h2>
+				<p>Our platform incorporates detailed data including price, news and social media trends.
+				</p>
+
+				<div class="btn-section"><a href="#packages" class="button btn btn-cta btn-block btn-lg">FIND OUT MORE</a></div>
+
+			</div>
+		</div>
+	</div>
+</section>
+
+<section id="features" class="dark-bg">
+	<div class="container">
+		<div class="row">
+			<div class="col-sm-4">
+				<h3 id="features_header">Up to date snapshots of top cryptocurrencies with data from multiple sources.</h3>
+			</div>
+			<div class="col-sm-8">
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="row">
+							<div class="col-xs-4">
+								<h2><i class="far fa-thumbs-up"></i></h2>
+							</div>
+							<div class="col-xs-8">
+								<h3>Social & News</h3>
+								<p>Find news articles & social media posts related to cryptocurrencies.</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="row">
+							<div class="col-xs-4">
+								<h2><i class="fas fa-code-branch"></i></h2>
+							</div>
+							<div class="col-xs-8">
+								<h3>Artificial Intelligence</h3>
+								<p>Comprehensive machine learning analysis using complex algorithms.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-6">
+						<div class="row">
+							<div class="col-xs-4">
+								<h2><i class="fas fa-comments"></i></h2>
+							</div>
+							<div class="col-xs-8">
+								<h3>Anonymous Chat</h3>
+								<p>Chat with other users about coins, trends & opportunities.</p>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="row">
+							<div class="col-xs-4">
+								<h2><i class="fas fa-chart-line"></i></h2>
+							</div>
+							<div class="col-xs-8">
+								<h3>Detailed Data</h3>
+								<p>Hourly, daily, weekly and monthly results of all relevant Cryptocurrency metrics.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- /.intro section -->
+<section id="notifications">
+	<div class="container">
+		<div class="row">
+
+		<!-- /.intro content -->
+		<div class="col-md-6 wow slideInRight">
+			<h2>Real-Time Notifications</h2>
+			<p>Price changes, market shifts, social media updates, current news. All the info you want delivered right to you.</p>
+
+			<div class="btn-section"><a href="#packages" class="button btn btn-cta btn-block btn-lg">FIND OUT MORE</a></div>
+
+		</div>
+
+		<!-- /.intro image -->
+			<div class="col-md-6 intro-pic wow slideInLeft">
+
+				<div id="socialTable" class="col-sm-12 notifications_list home_notifications_list">
+				  <% @global_notifications.each do |notif|
+				  # cache [sm, "row"] do
+				  %>
+
+				    <%= render :partial => 'notifications/notif', :locals => {:notif => notif} %>
+
+				  <% end unless @global_notifications.blank? %>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- /.pricing section -->
+<section id="packages">
+	<div class="container">
+		<div class="text-center">
+
+			<!-- /.pricing title -->
+			<h2 class="wow fadeInLeft">PACKAGES</h2>
+      <p>Bundles options are subject to change. Number of slots available for each bundle is limited. Bundle prices are subject to change. The information provided on this site does not constitute investment advice.</p>
+			<div class="title-line wow fadeInRight"></div>
+		</div>
+		<div class="row package-option">
+
+      <%= render :partial => 'home/packages', :locals => { :col_size => 4} %>
+
+		</div>
+	</div>
+</section>
+
+
+<!-- /.parallax full screen background image -->
+<section id="contact" class="dark-bg">
+
+	<div class="container">
+		<div class="row">
+
+      <%= render :partial => 'home/contact' %>
+
+		</div>
+	</div>
+</section>
+
+

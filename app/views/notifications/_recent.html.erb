@@ -1,0 +1,9 @@
+
+<div id="socialTable" class="col-sm-12 notifications_list <%= @identifier %>">
+  <% @notifications.each do |notif| %>
+
+    <%= render :partial => 'notifications/notif', :locals => {:notif => notif} %>
+
+  <% end unless @notifications.blank? %>
+
+</div>

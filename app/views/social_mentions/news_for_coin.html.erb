@@ -1,0 +1,18 @@
+<% provide(:title, "Recent News & Stories about #{@coin.full_name}") %>
+<section class="dark-bg">
+  <div class="container">
+  	<div class="row">
+      <div class="col-sm-12">
+        <h1>Recent News About <%= @coin.full_name %></h1>
+        <p>These articles are fetched automatically from thousands of news sites.
+          We're always working towards ensuring that they're as relevant as possible.
+        </p>
+      </div>
+    </div>
+    <div class="row">
+
+        <%= render :partial => 'social_mentions/social_list', :locals => { :coin_social_mentions => @coin_social_mentions, :content_type => "news"} %>
+
+    </div>
+  </div>
+</section>

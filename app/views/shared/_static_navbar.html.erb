@@ -1,0 +1,62 @@
+<% cache "nav #{current_user ? "#{current_user.updated_at} #{current_user.id}" : "public"} #{request.original_url}" do %>
+  <div class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+
+          <%= navbar_link_to("Coins",
+                             "/coins",
+                             :class => "upcase",
+                             :active_when => { :controller => "coins", :action => "index" }) %>
+          <%= navbar_link_to("News",
+                             "/news",
+                             :class => "upcase",
+                             :active_when => { :controller => "social_mentions", :action => "news" }) %>
+
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">SOCIAL <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+            <%= navbar_link_to("All Social Media",
+                               "/social",
+                               :class => "upcase") %>
+            <%= navbar_link_to("Reddit Posts",
+                               "/all_reddit",
+                               :class => "upcase") %>
+            <%= navbar_link_to("Twitter Content",
+                               "/all_twitter",
+                               :class => "upcase") %>
+           </ul>
+          </li>
+
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <%= navbar_link_to("Features",
+                "/features",
+                :active_when => { :controller => "home", :action => "features" }) %>
+          <!-- <%= navbar_link_to("Blog",
+                "/blog",
+                :active_when => { :controller => "home", :action => "blog" }) %>
+          <%= navbar_link_to("Contact",
+                "/contact",
+                :active_when => { :controller => "home", :action => "contact" }) %> -->
+          <%= navbar_link_to("About",
+                "/about",
+                :active_when => { :controller => "home", :action => "about" }) %>
+          <%= navbar_link_to("Login",
+                 new_user_session_path ) %>
+          <%= navbar_link_to("Sign Up",
+                new_user_registration_path,
+                :id => "navbar_register" ) %>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </div>
+<% end %>

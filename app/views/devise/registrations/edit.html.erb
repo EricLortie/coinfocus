@@ -1,0 +1,49 @@
+<div class="container">
+  <h2>Edit <%= resource_name.to_s.humanize %></h2>
+  <div class="row">
+    <div class="col-sm-6 devise_form">
+      <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+        <%= devise_error_messages! %>
+
+
+          <div class="field form-group">
+            <%= f.label :email %><br />
+            <%= f.email_field :email, autofocus: true, :class => "form-control" %>
+          </div>
+
+          <% if @user.pending_reconfirmation? %>
+            <div>Currently waiting confirmation for: <%= @user.unconfirmed_email %></div>
+          <% end %>
+
+          <% if current_user and current_user.admin? %>
+            <div class="field  form-group">
+              <%= f.check_box :approved %>&nbsp;<%= f.label :approved %>
+            </div>
+
+            <div class="field form-group">
+              <%= f.check_box :admin %>&nbsp;<%= f.label :admin %>
+            </div>
+          <%  end %>
+
+          <div class="field form-group">
+            <%= f.label :time_zone %><br />
+            <%= f.select "time_zone", TIMEZONES.collect{|a,b| b, a}, {:class => 'form-control'} %>
+          </div>
+          <br/>
+          <br/>
+          <div class="actions form-group">
+            <%= f.submit "Update", :class => "button btn btn-cta btn-block btn-lg" %>
+            <br/>
+            <a href="/users/<%=@user.id%>/change_password"><button class="button btn btn-secondary btn-block btn-lg">Change Password</button></a>
+          </div>
+
+      <% end %>
+    </div>
+
+
+    <div class="col-sm-6">
+        <h2 class="bitcoin-icon"><i class="fab fa-bitcoin"></i></h2>
+    </div>
+
+  </div>
+</div>

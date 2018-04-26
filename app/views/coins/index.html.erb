@@ -1,0 +1,18 @@
+<%= javascript_pack_tag 'application' %>
+<%= javascript_include_tag "jquery", "data-turbolinks-track" => true %>
+<%= javascript_include_tag "chart", "data-turbolinks-track" => true %>
+<%= javascript_include_tag "coin", "data-turbolinks-track" => true %>
+
+<% currency = "USD" %>
+<%= will_paginate @coins, class: "at_pagination pagination-centered", inner_window: 1, outer_window: 1 %>
+
+<div id="dataTable">
+
+  <%
+  cache [@coins, "index",  Rails.env.development? ? "dev #{Time.now.utc.to_f}" : ENV['HEROKU_RELEASE_VERSION']] do
+    @coins.each do |coin| %>
+      <%= render :partial => 'coin_row', :locals => {:coin => coin} %>
+    <% end
+  end -%>
+</div>
+<%= will_paginate @coins, class: "at_pagination pagination-centered", inner_window: 1, outer_window: 1 %>

@@ -1,0 +1,32 @@
+<%# The "application" layout is the default layout. It extends "base"  %>
+<%# to include things like header, footer, and alerts that are common  %>
+<%# to most (but not all) views.                                       %>
+
+<%=
+  if request.original_fullpath == "/"
+    render("shared/static_navbar")
+  else
+    render("shared/navbar")
+  end %>
+
+<% if request.original_fullpath != "/" and (!current_user or [0,1].include? current_user.role) %>
+  <%= render("shared/notice") %>
+<% end %>
+
+<%=
+  if request.original_fullpath == "/"
+    render("shared/landing-header")
+  end
+%>
+
+
+  <%= render("shared/flash") %>
+
+  <% #render("shared/page_header") %>
+
+  <%= yield %>
+
+
+  <%= render("shared/footer") %>
+
+<% parent_layout "base" %>

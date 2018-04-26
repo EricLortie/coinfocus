@@ -1,0 +1,69 @@
+<div class="coinListMarket col-sm-3 coinDataElement">
+  <% if coin.snapshot_volume_24_to == 0.0 %>
+
+    <div class="row partial_data_header">
+      <div class="coinListSubCell coinListSubLabel col-xs-6 col-sm-12">Volume</div>
+      <div class="coinListSubCell coinListSubValue coinTableHeader col-xs-6 col-sm-12">Data Coming Soon</div>
+    </div>
+
+  <% else %>
+    <div class="row partial_data_header">
+      <div class="coinListSubCell coinListSubLabel col-xs-6 col-sm-12">Volume</div>
+      <div class="coinListSubCell coinListSubValue coinTableHeader col-xs-6 col-sm-12"><%= (clean_num_value(coin.snapshot_volume_24_to.to_f) rescue "0") %> (USD)</div>
+    </div>
+    <div class="row coin_data_table">
+     <div class="col-xs-3 col-md-12">
+       <div class="row">
+         <div class="coinListSubValue col-sm-12">
+           1 Hour:<br/>
+           <span class="nowrap">
+             <%= pct_change_indicator(coin.snapshot_vol_change_pct_60m) %>
+             <%= (clean_num_value(coin.snapshot_vol_change_pct_60m.to_f.abs)) %>%
+           </span><br/>
+           ($<%= (clean_num_value(number_with_precision(coin.snapshot_vol_change_60m, :precision => 2).to_f)) %>)
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-3 col-md-12">
+      <div class="row">
+        <div class="coinListSubValue col-sm-12">
+          24 Hours: <br/>
+          <span class="nowrap">
+            <%= pct_change_indicator(coin.snapshot_vol_change_pct_24) %>
+            <%= (clean_num_value(coin.snapshot_vol_change_pct_24.to_f.abs)) %>%
+          </span><br/>
+          ($<%= (clean_num_value(number_with_precision(coin.snapshot_vol_change_24, :precision => 2).to_f)) %>)
+       </div>
+     </div>
+   </div>
+     <div class="col-xs-3 col-md-12">
+       <div class="row">
+         <div class="coinListSubValue col-sm-12">
+          <% unless coin.snapshot_vol_change_pct_1_week.blank? %>
+            1 Week:<br/>
+            <span class="nowrap">
+              <%= pct_change_indicator(coin.snapshot_vol_change_pct_1_week) %>
+              <%= (clean_num_value(coin.snapshot_vol_change_pct_1_week.to_f.abs)) %>%
+            </span><br/>
+            ($<%= (clean_num_value(number_with_precision(coin.snapshot_vol_change_1_week, :precision => 2).to_f)) %>)
+          <% end %>
+       </div>
+     </div>
+   </div>
+   <div class="col-xs-3 col-md-12">
+     <div class="row">
+       <div class="coinListSubValue col-sm-12">
+            <% unless coin.snapshot_vol_change_pct_1_month.blank? %>
+              1 Month:<br/>
+              <span class="nowrap">
+                <%= pct_change_indicator(coin.snapshot_vol_change_pct_1_month) %>
+                <%= (clean_num_value(coin.snapshot_vol_change_pct_1_month.to_f.abs)) %>%
+              </span><br/>
+              ($<%= (clean_num_value(number_with_precision(coin.snapshot_vol_change_1_month, :precision => 2).to_f)) %>)
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

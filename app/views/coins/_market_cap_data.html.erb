@@ -1,0 +1,60 @@
+<div class="coinListValue col-sm-3 coinDataElement">
+  <div class="row partial_data_header">
+    <div class="coinListSubCell coinListSubLabel col-xs-6 col-sm-12">Market Cap</div>
+    <div class="coinListSubCell coinListSubValue coinTableHeader col-xs-6 col-sm-12"><%= (clean_num_value(coin.snapshot_market_cap.to_f) rescue "0") %> (USD)</div>
+  </div>
+  <div class="row coin_data_table">
+   <div class="col-xs-3 col-md-12">
+     <div class="row">
+       <div class="coinListSubValue col-sm-12">
+         1 Hour:<br/>
+         <span class="nowrap">
+           <%= pct_change_indicator(coin.snapshot_mc_change_pct_60m) %>
+           <%= (clean_num_value(coin.snapshot_mc_change_pct_60m.to_f.abs)) %>%
+         </span><br/>
+         ($<%= (clean_num_value(coin.snapshot_mc_change_60m.to_f)) %>)
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-3 col-md-12">
+    <div class="row">
+      <div class="coinListSubValue col-sm-12">
+        24 Hours:<br/>
+        <span class="nowrap">
+          <%= pct_change_indicator(coin.snapshot_mc_change_pct_24) %>
+          <%= (clean_num_value(coin.snapshot_mc_change_pct_24.to_f.abs)) %>%
+        </span><br/>
+        ($<%= (clean_num_value(coin.snapshot_mc_change_24.to_f)) %>)
+     </div>
+   </div>
+ </div>
+   <div class="col-xs-3 col-md-12">
+     <div class="row">
+       <div class="coinListSubValue col-sm-12">
+          <% unless coin.snapshot_mc_change_pct_1_week.blank? %>
+            1 Week:<br/>
+            <span class="nowrap">
+              <%= pct_change_indicator(coin.snapshot_mc_change_pct_1_week) %>
+              <%= (clean_num_value(coin.snapshot_mc_change_pct_1_week.to_f.abs)) %>%
+            </span><br/>
+            ($<%= (clean_num_value(coin.snapshot_mc_change_1_week.to_f)) %>)
+          <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-3 col-md-12">
+    <div class="row">
+      <div class="coinListSubValue col-sm-12">
+        <% unless coin.snapshot_mc_change_pct_1_month.blank? %>
+          1 Month:<br/>
+          <span class="nowrap">
+            <%= pct_change_indicator(coin.snapshot_mc_change_pct_1_month) %>
+            <%= (clean_num_value(coin.snapshot_mc_change_pct_1_month.to_f.abs)) %>%
+          </span><br/>
+          ($<%= (clean_num_value(coin.snapshot_mc_change_1_month.to_f)) %>)
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

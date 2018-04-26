@@ -1,0 +1,43 @@
+
+<div id="socialTable" class="col-sm-12">
+
+<%= will_paginate coin_social_mentions, class: "at_pagination pagination-centered", inner_window: 1, outer_window: 1 rescue "" %>
+
+  <%= render :partial => 'social_mentions/content_notice', :locals => {:content_type => content_type} if (!current_user or [USER_FREE_ROLE, USER_STANDARD_ROLE].include? current_user.role) or (current_user and !current_user.admin?) %>
+
+  <% coin_social_mentions.each do |sm|
+      cache "sm#{sm.id} #{sm.created_at} #{current_user.admin? rescue "no"}", expires_in: 30.minutes do
+        #coin_links = sm.coins.uniq.map{ |c| "<a href='/crypto/#{c.short_name}'>#{c.short_name}</a>".html_safe}
+      %>
+
+        <div class="row socialRow">
+          <div class="coinListValue col-sm-3">
+            <h3 class="coin_links"><%= sm.coin_short_names.uniq.map{|c| "<a href='/crypto/#{c}'>#{c}</a>"}.join(', ').html_safe unless sm.coin_short_names.blank? %></h3>
+            <% unless sm.creator_name.blank? %>
+              <h4><%= creator_icon(sm.creator_type) %> <%= creator_cp_url(sm.creator_name) %></h4>
+            <% end %>
+            <% if ENV["RAILS_ENV"] == "development" or (!current_user.blank? and current_user.admin?) %>
+              <% unless sm.sentiment.to_i == 0 %>
+                <h4>Sentiment: <%= sentiment_display(sm.sentiment.to_i) %></h4>
+              <% end %>
+              <% unless sm.latest_score == 0 %>
+                <h4>Score: <%= sm.latest_score %>/100</h4>
+              <% end %>
+              <%= "#{sm.social_id} [#{sm.id}]" %>
+            <% end %>
+            <br/>
+          </div>
+          <div class="coinListValue col-sm-9">
+            <h4 class="sm_time"><span class="utc_time" data-utc-time='<%= convert_moment(sm.posted_at.utc) %>'><%= sm.posted_at.utc %></span></h4>
+            <h3 class="sm_title"><%= sm.displayed_title %></h3>
+            <h5 class="sm_link"><%= sm.web_safe_url.html_safe %></h5>
+            <p style="display:none;"><%= sm.social_body %></p>
+          </div>
+
+        </div>
+
+      <%
+      end
+    end %>
+    <%= will_paginate coin_social_mentions, class: "at_pagination pagination-centered", inner_window: 1, outer_window: 1 rescue "" %>
+</div>

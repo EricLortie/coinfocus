@@ -1,0 +1,56 @@
+<div class="coinListChange col-sm-3 coinDataElement">
+  <div class="row partial_data_header">
+    <div class="coinListSubCell coinListSubLabel col-xs-6 col-sm-12">Value</div>
+    <div class="coinListSubCell coinListSubValue coinTableHeader col-xs-6 col-sm-12"><%= (clean_num_value(coin.snapshot_price.to_f) rescue "0") %> (USD)</div>
+  </div>
+  <div class="row coin_data_table">
+    <div class="col-xs-3 col-md-12">
+      <div class="row">
+        <div class="coinListSubValue col-sm-12">
+          1 Hour:<br/>
+          <span class="nowrap">
+            <%= pct_change_indicator(coin.snapshot_price_change_pct_60m) %>
+            <%= (number_with_precision(coin.snapshot_price_change_pct_60m.to_f.abs, precision: 2, delimiter: ',')) %>%
+          </span><br/>
+           ($<%= (number_with_precision(coin.snapshot_price_change_60m, :precision => 2)) %>)
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-3 col-md-12">
+      <div class="row">
+        <div class="coinListSubValue col-sm-12">
+          24 Hours:<br/>
+          <span class="nowrap">
+            <%= pct_change_indicator(coin.snapshot_price_change_pct_24) %>
+            <%= (number_with_precision(coin.snapshot_price_change_pct_24.to_f.abs, precision: 2, delimiter: ',')) %>%
+          </span><br/>
+          ($<%= (number_with_precision(coin.snapshot_price_change_24, :precision => 2)) %>)
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-3 col-md-12">
+      <div class="row">
+        <div class="coinListSubValue col-sm-12">
+          1 week: <br/>
+          <span class="nowrap">
+            <%= pct_change_indicator(coin.snapshot_price_change_pct_1_week) %>
+            <%= (number_with_precision(coin.snapshot_price_change_pct_1_week.to_f.abs, precision: 2, delimiter: ',')) %>%
+          </span><br/>
+           ($<%= (number_with_precision(coin.snapshot_price_change_1_week, :precision => 2)) %>)
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-3 col-md-12">
+      <div class="row">
+        <div class="coinListSubValue col-sm-12">
+          1 month:<br/>
+          <span class="nowrap">
+            <%= pct_change_indicator(coin.snapshot_price_change_pct_1_month) %>
+            <%= number_with_precision(coin.snapshot_price_change_pct_1_month.to_f.abs, precision: 2, delimiter: ',') %>%
+          </span><br/>
+           ($<%= (number_with_precision(coin.snapshot_price_change_1_month, :precision => 2)) %>)
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,240 @@
+
+<%
+  coin = coin || ""
+  return "".html_safe if coin.blank?
+  cache "#{coin.id} #{coin.updated_at} #{coin_chart_data[chart.to_sym][:labels].length rescue 0} #{chart} #{Time.now.utc.to_f if Rails.env.development?}" do
+    is_active_class ||= ""
+    chart ||= "week"
+    show_multi ||= false
+
+    c_data = coin_chart_data[chart.to_sym].is_a?(String) ? YAML.load(coin_chart_data[chart.to_sym]) : coin_chart_data[chart.to_sym]
+
+    return "".html_safe if c_data.blank?
+    labels = c_data[:labels].sort.uniq
+    c_data = c_data[:data].sort.to_h rescue ""
+    return "".html_safe if c_data.blank?
+
+    show_social = ["week","day"].include?(chart)
+
+    tooltips = []
+    social_totals = []
+    reddit_totals = []
+    news_totals = []
+    twitter_totals = []
+    total = 0
+    price_count = 0
+    prices = []
+    social_total_posts = 0
+    social_count = 0
+    c_data.each do |k, d|
+      prices.push d[:price]
+      total += d[:price]
+      price_count += 1
+      news_total = 0
+      reddit_total = 0
+      twitter_total = 0
+      social_total = 0
+      if show_social
+        news_total = d[:social][:news_count]
+        reddit_total = d[:social][:reddit_count]
+        twitter_total = d[:social][:twitter_count]
+        social_total = ((d[:social][:news_count] + d[:social][:reddit_count] + d[:social][:twitter_count]) rescue 0)
+        social_total_posts += social_total
+        social_count += 1
+        dummy_data = false
+        if social_total == 0
+          # avg = social_total_posts/social_count
+          # multiplier = rand(10) > 7 ? 5 : 0.8
+          # social_total = ( rand(avg * multiplier) + avg*0.9 ).to_i
+          # dummy_data = true
+          # tooltips.push ["Data still processing"]
+        else
+          tooltips.push ["News: #{d[:social][:news_count] rescue 0}", "Reddit: #{d[:social][:reddit_count] rescue 0}", "Twitter: #{d[:social][:twitter_count] rescue 0}"]
+        end
+
+        social_totals.push(social_total)
+        news_totals.push(news_total)
+        reddit_totals.push(reddit_total)
+        twitter_totals.push(twitter_total)
+      end
+    end
+
+    average = total / price_count
+
+    opts = {:unit => "hour", :format =>"hour"} if chart=="day"
+    opts = {:unit => "day", :format =>"day"} if chart=="week"
+    opts = {:unit => "day", :format =>"day"} if chart=="month"
+    opts = {:unit => "month", :format =>"month"} if chart=="year"
+  %>
+
+  <div id="coin-<%= chart %>-graph<%= coin.id %>" class="coin-graph tab-pane fade in <%= is_active_class %>">
+    <div class="row">
+      <div class="col-sm-12">
+
+        <canvas id="<%= "#{chart}-#{coin.id}" %>Chart" width="400" height="300"></canvas>
+        <script type="text/javascript">
+            var ctx = document.getElementById("<%= "#{chart}-#{coin.id}" %>Chart").getContext('2d');
+            var labels = <%= labels.map{|l| Time.zone.at(l).utc}.to_json.html_safe %>;
+            var <%= "#{chart}_#{coin.id}" %>_tooltips = <%= tooltips.to_json.html_safe %>;
+            var <%= "#{chart}_#{coin.id}" %>_prices = <%= prices %>
+
+            var myChart = new Chart(ctx, {
+              type: 'bar',
+              data: {
+                labels: labels,
+                datasets: [
+
+                  <% if show_social %>
+                    {
+                      label: 'Social',
+                      yAxisID: 'bar-axis',
+                      backgroundColor: 'whitesmoke',
+                      data: <%= social_totals %>
+                    },
+                    <% if show_multi %>
+                      {
+                        label: 'News',
+                        yAxisID: 'bar-axis2',
+                        backgroundColor: '#01cd74',
+                        data: <%= news_totals %>
+                      },
+                      {
+                        label: 'Reddit',
+                        yAxisID: 'bar-axis3',
+                        backgroundColor: '#ff4500',
+                        data: <%= reddit_totals %>
+                      },
+                      {
+                        label: 'Twitter',
+                        yAxisID: 'bar-axis4',
+                        backgroundColor: '#1da1f2',
+                        data: <%= twitter_totals %>
+                      },
+                    <% end %>
+                  <% end %>
+                  {
+                    label: 'Price',
+                    yAxisID: 'line-axis',
+                    data: <%= "#{chart}_#{coin.id}" %>_prices,
+                    type: 'line',
+                    fill: false,
+                    backgroundColor: [
+                      'darkgoldenrod'
+                    ],
+                    borderColor: [
+                      'darkgoldenrod'
+                    ],
+                    pointRadius: 0,
+                  }
+                ]
+              },
+              options: {
+                "responsive": true,
+                "maintainAspectRatio": false,
+                scales: {
+                  yAxes: [{
+                    id: 'line-axis',
+                    type: 'linear',
+                    position: 'left',
+                    ticks: {
+                      fontColor: '#a7a7a7',
+                    },
+                  },
+                  <% if show_social %>
+                    {
+                      id: 'bar-axis',
+                      type: 'linear',
+                      position: 'right',
+                      ticks: {
+                        fontColor: '#a7a7a7',
+                      },
+                      barPercentage: 1,
+                    },
+                    <% if show_multi %>
+                      {
+                        id: 'bar-axis2',
+                        type: 'linear',
+                        position: 'right',
+                        ticks: {
+                          fontColor: '#01cd74',
+                        },
+                        barPercentage: 1,
+                      },
+                      {
+                        id: 'bar-axis3',
+                        type: 'linear',
+                        position: 'right',
+                        ticks: {
+                          fontColor: '#ff4500',
+                        },
+                        barPercentage: 1,
+                      },
+                      {
+                        id: 'bar-axis4',
+                        type: 'linear',
+                        position: 'right',
+                        ticks: {
+                          fontColor: '#1da1f2',
+                        },
+                        barPercentage: 1,
+                      },
+                    <% end  %>
+                  <% end  %>
+                  ],
+                  xAxes: [{
+                    type: 'time',
+                    time: {
+                      unit: '<%= opts[:unit] %>',
+                    },
+                    ticks: {
+                      fontColor: '#a7a7a7',
+                    },
+                  }]
+                },
+                tooltips: {
+                  intersect: false,
+                  callbacks: {
+                    title: function(tooltipItem, data) {
+                      title_array = []
+                      time = Date.parse(data['labels'][tooltipItem[0]['index']]);
+                      dateObj = new Date(time)
+                      title_array.push(`${timeSince(time)} ago`)
+                      title_array.push(`${moment(dateObj).calendar()}`)
+                      return title_array;
+                    },
+                    label: function(tooltipItem, data) {
+                      tt_array = []
+                      tt_array.push(<%= "#{chart}_#{coin.id}" %>_prices[tooltipItem.index])
+                      <% if show_social %>
+                        if (typeof <%= "#{chart}_#{coin.id}" %>_tooltips[tooltipItem.index] != "undefined"){
+                          for (i=0;i<<%= "#{chart}_#{coin.id}" %>_tooltips[tooltipItem.index].length;i++) {
+                            tt_array.push(<%= "#{chart}_#{coin.id}" %>_tooltips[tooltipItem.index][i])
+                          }
+                        }
+                      <% end %>
+                      return tt_array;
+                    },
+                  },
+                  backgroundColor: '#FFF',
+                  titleFontSize: 16,
+                  titleFontColor: '#0066ff',
+                  bodyFontColor: '#000',
+                  bodyFontSize: 14,
+                  displayColors: false
+                },
+                legend: {
+                  display: true,
+                  labels: {
+                    fontColor: '#a7a7a7',
+                    boxWidth: 12,
+                    fontSize: 12
+                  },
+                }
+              }
+            });
+        </script>
+      </div>
+    </div>
+
+  </div>
+<% end %>

@@ -1,0 +1,15 @@
+<% provide(:title, "Social Media Posts about Top Cryptocurrencies") %>
+<section class="dark-bg">
+  <div class="container">
+  	<div class="row">
+      <h1>Recent Social Media Mentions of Cryptocurrencies</h1>
+      <p>The following social media content is fetched automatically from countless
+        users. We're always working to fetch more content and fine-tune our
+        product.</p>
+        <h4>Coinfocus does not endorse the views displayed in these posts. These posts are automatically curated and displayed here.</h4>
+
+        <%= render :partial => 'social_mentions/social_list', :locals => { :coin_social_mentions => @coin_social_mentions, :content_type => "social_media"} %>
+
+    </div>
+  </div>
+</section>

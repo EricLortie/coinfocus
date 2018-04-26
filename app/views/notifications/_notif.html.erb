@@ -1,0 +1,19 @@
+<%
+  if notif.coins.blank?
+    coin_links = "COIN</br>FOCUS".html_safe if coin_links.blank?
+  else
+    coin_links = notif.coins.uniq.map{ |c| "<a href='/crypto/#{c.short_name}'>#{c.short_name}</a>".html_safe}
+    coin_links = coin_links.join(", ").html_safe
+  end
+%>
+<div class="row socialRow">
+  <div class="coinListValue col-sm-2">
+    <h5><%= coin_links %></h5>
+  </div>
+  <div class="coinListValue col-sm-10">
+    <h5 class="notif_time"><span class="utc_time" data-utc-time='<%= convert_moment(notif.created_at.utc) %>'><%= notif.created_at.utc %></span></h4>
+    <h4 class="notif_title"><%= notif.title unless notif.title.blank? %></h3>
+    <p class="notif_body"><%= notif.body.html_safe unless notif.body.blank? %></p>
+  </div>
+
+</div>

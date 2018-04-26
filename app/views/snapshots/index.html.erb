@@ -1,0 +1,89 @@
+<% provide(:title, "Snapshots") %>
+<%= javascript_pack_tag 'application' %>
+
+<% currency = "USD" %>
+
+<%= will_paginate @snapshots, class: "at_pagination pagination-centered" %>
+<div id="dataTable">
+
+  <div class="row dataHeader">
+    <div class="coinListName col-xs-3">Info</div>
+    <div class="coinListValue col-xs-3">Market</div>
+    <div class="coinListShare col-xs-3">Volume</div>
+    <div class="coinListChange col-xs-3">Change</div>
+  </div>
+  <% count = 0 %>
+  <% @snapshots.each do |snapshot| %>
+
+
+    <div class="row <%=(count%2==0) ? "alt-row" : "" %>">
+      <div class="coinListValue col-xs-3">
+        <div class="row">
+          <div class="coinListSubLabel col-xs-6">From: <%= snapshot.fromsymbol %></div>
+          <div class="coinListSubLabel col-xs-6">To: <%= snapshot.tosymbol %></div>
+        </div>
+        <div class="row">
+          <div class="coinListSubLabel col-xs-12">Snapshot taken:</div>
+          <div class="coinListSubValue col-xs-12"><%= (distance_of_time_in_words(Time.now.utc, snapshot.time_collected) rescue "N/A") %> ago</div>
+        </div>
+      </div>
+      <div class="coinListValue col-xs-3">
+        <div class="row">
+          <div class="coinListSubLabel col-xs-6">Market</div>
+          <div class="coinListSubValue col-xs-6"><%= snapshot.market %></div>
+        </div>
+        <div class="row">
+          <div class="coinListSubLabel col-xs-12">Price</div>
+          <div class="coinListSubValue col-xs-12">
+            <%= number_with_precision(snapshot.price, :delimiter => ',', :precision => 2) %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="coinListSubLabel col-xs-12">Circulating</div>
+          <div class="coinListSubValue col-xs-12">
+            <%= number_with_precision(snapshot.price, :delimiter => ',', :precision => 2) %>
+          </div>
+        </div>
+      </div>
+      <div class="coinListValue col-xs-3">
+        <div class="row">
+          <div class="coinListSubLabel col-xs-12">Volume (24 hrs)</div>
+          <div class="coinListSubValue col-xs-12">
+            <%= number_with_precision(snapshot.volume_24, :delimiter => ',', :precision => 2) %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="coinListSubLabel col-xs-12">Last Volume</div>
+          <div class="coinListSubValue col-xs-12">
+            <%= number_with_precision(snapshot.last_volume, :delimiter => ',', :precision => 2) %>
+          </div>
+        </div>
+      </div>
+      <div class="coinListValue col-xs-3">
+        <div class="row">
+          <div class="coinListSubLabel col-xs-12">Open (24 hrs)</div>
+          <div class="coinListSubValue col-xs-12">
+            <%= number_with_precision(snapshot.open_24, :delimiter => ',', :precision => 2) %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="coinListSubLabel col-xs-12">High (24 hrs)</div>
+          <div class="coinListSubValue col-xs-12">
+            <%= number_with_precision(snapshot.high_24, :delimiter => ',', :precision => 2) %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="coinListSubLabel col-xs-12">Low (24 hrs)</div>
+          <div class="coinListSubValue col-xs-12">
+            <%= number_with_precision(snapshot.low_24, :delimiter => ',', :precision => 2) %>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <% count += 1 %>
+
+  <% end %>
+</div>
+<%= will_paginate @snapshots, class: "at_pagination pagination-centered" %>

@@ -1,0 +1,116 @@
+<% cache "nav #{current_user ? "#{current_user.updated_at} #{current_user.id}" : "public"} #{request.original_url}" do %>
+  <div class="navbar navbar-default navbar-static-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <%= link_to((image_tag "logo.png", :class => "logo-img"), root_path, :class => "navbar-brand logo") %><span id="beta-notif">(BETA)</span>
+      </div>
+      <div class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+          <% show_menu = true # user_signed_in?
+          if show_menu %>
+          <%= navbar_link_to("Coins",
+                             "/coins",
+                             :class => "upcase",
+                             :active_when => { :controller => "coins", :action => "index" }) %>
+          <%= navbar_link_to("News",
+                             "/news",
+                             :class => "upcase",
+                             :active_when => { :controller => "social_mentions", :action => "news" }) %>
+
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">SOCIAL <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+            <%= navbar_link_to("All Social Media",
+                               "/social",
+                               :class => "upcase") %>
+            <%= navbar_link_to("Reddit Posts",
+                               "/all_reddit",
+                               :class => "upcase") %>
+            <%= navbar_link_to("Twitter Content",
+                               "/all_twitter",
+                               :class => "upcase") %>
+           </ul>
+          </li>
+          <% end %>
+          <% if user_signed_in? and current_user.admin? %>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">SITE ADMIN <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><%= navbar_link_to("Snapshots",
+                         "/snapshots",
+                         :active_when => { :controller => "snapshots" }) %></li>
+               <% if current_user and current_user.admin? %>
+                <li><%= navbar_link_to("RSS Feeds",
+                            "/rss_feeds",
+                            :active_when => { :controller => "rss_feeds" }) %></li>
+                <li><%= navbar_link_to("Sidekiq Queue",
+                             "/sidekiq",
+                             :active_when => { :controller => "sidekiq" }) %></li>
+                <li class="divider"></li>
+                <li><a href="/build_recent_data">Build Recent Data</a></li>
+                <li><a href="/fetch_coins">Fetch Coins</a></li>
+                <li><a href="/fetch_circulating_values">Fetch Circulating Coins</a></li>
+                <li><a href="/build_histories">Build Histories</a></li>
+                <li><a href="/queue_all_snapshots">Queue Snapshot Job</a></li>
+                <li><a href="/build_snapshot_monitor">Build Snapshot Monitor</a></li>
+                <li><a href="/calculate_averages_test">Test Averages</a></li>
+                <li><a href="/fetch_all_snapshots">Fetch Snapshots</a></li>
+                <li><a href="/fetch_all_rss_feeds">Fetch RSS</a></li>
+                <li><a href="/capture_twitter_stream_data">Test Twitter</a></li>
+                <li><a href="/test_reddit_comment_stream">Test Reddit Comments</a></li>
+                <li><a href="/test_reddit_post_stream">Test Reddit Posts</a></li>
+                <li><a href="/test_subreddit_worker">Test Subreddit Worker</a></li>
+                <li><a href="/test_news_stream">Test News</a></li>
+                <li><a href="/test_notifications">Test Notification</a></li>
+                <li><a href="/test_coin_notifications">Test BTC Notification</a></li>
+                <li><a href="/build_recent_social_data">Build Social Data</a></li>
+                <li class="divider"></li>
+                <li class="dropdown-header">Admin</li>
+                <li><a href="/users">Users</a></li>
+              <% end %>
+            </ul>
+          </li>
+          <% end %>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <%= navbar_link_to("Features",
+                "/features",
+                :active_when => { :controller => "home", :action => "features" }) %>
+          <!-- <%= navbar_link_to("Blog",
+                "/blog",
+                :active_when => { :controller => "home", :action => "blog" }) %>
+          <%= navbar_link_to("Contact",
+                "/contact",
+                :active_when => { :controller => "home", :action => "contact" }) %> -->
+          <%= navbar_link_to("About",
+                "/about",
+                :active_when => { :controller => "home", :action => "about" }) %>
+          <%= navbar_link_to("Login",
+                 new_user_session_path ) unless user_signed_in? %>
+          <%= navbar_link_to("Sign Up",
+                new_user_registration_path,
+                :id => "navbar_register" ) unless user_signed_in? %>
+
+          <% if user_signed_in? %>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">PROFILE <b class="caret"></b></a>
+            <ul class="dropdown-menu">
+              <li><%= navbar_link_to("Edit Your Profile",
+                         "/users/#{current_user.id}/edit") %></li>
+                 <%= navbar_link_to("Logout",
+                        destroy_user_session_path,
+                        :method => :delete,
+                        :active_when => { :controller => "devise" } ) %>
+            </ul>
+          <% end %>
+        </ul>
+      </div><!--/.nav-collapse -->
+    </div>
+  </div>
+<% end %>

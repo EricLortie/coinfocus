@@ -1,0 +1,19 @@
+<section>
+  <div class="container">
+  	<div id="showHeader" class="row">
+
+      <div class="col-xs-4">
+        <h2 class="creator_icon"><%= @creator.creator_icon %></h2>
+      </div>
+      <div class="col-xs-8">
+        <h3><%= @creator.name %></h3>
+        <h2><%= @creator.display_public_url %></h2>
+      </div>
+
+    </div>
+
+    <div class="row">
+      <%= render :partial => 'social_mentions/social_list', :locals => { :coin_social_mentions => @coin_social_mentions, :content_type => @creator.creator_type} %>
+    </div>
+  </div>
+</section>

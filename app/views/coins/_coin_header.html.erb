@@ -1,0 +1,24 @@
+<div class="row coinHeaderRow">
+  <div class="coinListSubCell coinNameCell col-sm-4">
+    <a href="/crypto/<%=coin.short_name%>">
+      <img class="coin-icon" src="<%= coin["image_url"] %>" /><%= coin["full_name"] %> (<%= coin["short_name"] %>)
+    </a><%= "&nbsp;<a href='/show_coin_from_prod/#{coin.id}'>!</a>".html_safe if (!current_user.blank? and current_user.admin?) %>
+    <div class="coin_meta">
+      <span class="utc_time" data-utc-time='<%= convert_moment(coin.snapshot_updated_at.utc) rescue "" %>'><%= coin.snapshot_updated_at %></span>
+      <span class="utc_time" style="display:none" data-utc-time='<%= convert_moment(coin.snapshot_time_collected.utc) rescue "" %>'><%= coin.snapshot_time_collected %></span>
+    </div>
+  </div>
+  <div class="coinListSubCell col-sm-3">
+    <div class="row">
+      <div class="coinListSubLabel col-xs-6 col-sm-12">Circulating</div>
+      <div class="coinListSubValue coinTableHeader col-xs-6 col-sm-12"><%= (clean_num_value(coin.snapshot_circulating.to_f) rescue "") %></div>
+    </div>
+  </div>
+  <div class="coinListSubCell col-sm-3">
+    <div class="row">
+      <div class="coinListSubLabel col-xs-6 col-sm-12">Trending <%= trend_indicator(coin.snapshot_trending_up) %></div>
+      <% (trending_time = coin.snapshot_trending_since.utc rescue "N/A") %>
+      <div class="coinListSubValue coinTableHeader col-xs-6 col-sm-12">Since: <span class="utc_time" data-utc-time='<%= convert_moment(trending_time) %>'><%= trending_time %></span></div>
+    </div>
+  </div>
+</div>

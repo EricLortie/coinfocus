@@ -1,0 +1,40 @@
+<div class="coinListMarket col-sm-3 coinDataElement">
+  <div class="row coin_data_table">
+    <div class="col-xs-12">
+      <table class="social-data-table">
+        <tr>
+          <th scope="row"></th>
+          <th><a href="<%= coin.reddit_link %>"><i class="fab fa-reddit" aria-hidden="true"></i></a></th>
+          <th><a href="<%= coin.twitter_link %>"><i class="fab fa-twitter" aria-hidden="true"></i></a></th>
+          <th><a href="<%= coin.news_link %>"><i class="far fa-newspaper" aria-hidden="true"></i> News</a></th>
+        </tr>
+        <tr>
+          <th class="text-column" scope="row">15m</td>
+          <td class="align-left"><%= social_val(coin, 'reddit', '15m') %></td>
+          <td class="align-left"><%= social_val(coin, 'twitter', '15m') %></td>
+          <td class="align-left"><%= social_val(coin, 'news', '15m') %></td>
+        </tr>
+        <tr>
+          <td class="text-column" scope="row">30m</td>
+          <td class="align-left"><%= social_val(coin, 'reddit', '30m') %></td>
+          <td class="align-left"><%= social_val(coin, 'twitter', '30m') %></td>
+          <td class="align-left"><%= social_val(coin, 'news', '30m') %></td>
+        </tr>
+        <tr>
+          <td class="text-column" scope="row">60m</td>
+          <td class="align-left"><%= social_val(coin, 'reddit', '60m') %></td>
+          <td class="align-left"><%= social_val(coin, 'twitter', '60m') %></td>
+          <td class="align-left"><%= social_val(coin, 'news', '60m') %></td>
+        </tr>
+        <tr>
+          <td class="text-column" scope="row">24h</td>
+          <td class="align-left"><%= social_val(coin, 'reddit', '24h') %></td>
+          <td class="align-left"><%= social_val(coin, 'twitter', '24h') %></td>
+          <td class="align-left"><%= social_val(coin, 'news', '24h') %></td>
+        </tr>
+      </table>
+
+   </div>
+
+ </div>
+</div>

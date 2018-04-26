@@ -1,0 +1,36 @@
+# == Schema Information
+#
+# Table name: coins
+#
+#  circulating        :decimal(, )
+#  created_at         :datetime         not null
+#  default_rss_built  :integer
+#  external_id        :integer
+#  full_name          :string
+#  histories_fetched  :integer
+#  id                 :integer          not null, primary key
+#  image_url          :string
+#  last_volume        :decimal(, )      default(0.0)
+#  latest_market_cap  :decimal(, )      default(0.0)
+#  latest_price       :decimal(, )      default(0.0)
+#  latest_snapshot_id :integer
+#  short_name         :string
+#  updated_at         :datetime         not null
+#  website_url        :string
+#
+# Indexes
+#
+#  index_coins_on_latest_snapshot_id  (latest_snapshot_id)
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# This model initially had no columns defined. If you add columns to the
+# model remove the '{}' from the fixture names and add the columns immediately
+# below each fixture, per the syntax in the comments below
+#
+one: {}
+# column: value
+#
+two: {}
+# column: value

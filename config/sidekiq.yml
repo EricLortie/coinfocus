@@ -1,0 +1,67 @@
+---
+:queues:
+  - streamer_worker
+  - critical
+  - snapshots
+  - default
+  - social
+  - low_priority
+  - snapshot_export
+:concurrency:  30
+:timeout: 30
+:schedule:
+  critical_snapshot_scheduler:
+    class: CriticalSnapshotScheduler
+    queue: critical
+    description: "Fetches snapshots for coins worth more than $1 every 3 mins"
+    every: '4m'
+  snapshot_scheduler:
+    class: SnapshotScheduler
+    queue: snapshots
+    description: "Fetches snapshots every 7 mins"
+    every: '14m'
+  low_priority_snapshot_scheduler:
+    class: LowPrioritySnapshotScheduler
+    queue: snapshots
+    description: "Fetches low priority snapshots every 30 mins"
+    every: '120m'
+  snapshot_scheduler:
+    class: SnapshotMonitorScheduler
+    queue: critical
+    description: "Builds snapshot metrics post."
+    every: '10m'
+  twitter_stream_scheduler:
+    class: TwitterStreamScheduler
+    queue: streamer_worker
+    description: "Attempts to restart the TwitterStreamWorker every 10 minutes"
+    every: '10m'
+  reddit_comment_stream_scheduler:
+    class: RedditCommentStreamScheduler
+    queue: streamer_worker
+    description: "Attempts to restart the RedditCommentStreamScheduler every 10 minutes"
+    every: '10m'
+  reddit_post_stream_scheduler:
+    class: RedditPostStreamScheduler
+    queue: streamer_worker
+    description: "Attempts to restart the RedditPostStreamScheduler every 10 minutes"
+    every: '10m'
+  reddit_subreddit_scheduler:
+    class: RedditSubredditScheduler
+    queue: streamer_worker
+    description: "Attempts to restart the RedditSubredditScheduler every 10 minutes"
+    every: '10m'
+  news_scheduler:
+    class: NewsStreamScheduler
+    queue: streamer_worker
+    description: "Fetches news stories every 5 minutes"
+    every: '5m'
+  circulation_scheduler:
+    class: CirculationScheduler
+    queue: low_priority
+    description: "Fetches coins in circulation every 120 mins"
+    every: '180m'
+  histories_scheduler:
+    class: HistoriesScheduler
+    queue: low_priority
+    description: "Fetches coin histories every 24 hours"
+    cron: "* * * 24 * *"

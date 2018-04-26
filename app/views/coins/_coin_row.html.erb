@@ -1,0 +1,49 @@
+<%
+cache "coin_index #{coin.id} #{coin.latest_snapshot_id} #{Time.now.utc.to_f if Rails.env.development?}", expires_in: 10.minutes do
+
+  coin_chart_data = {
+    :day => coin.snapshot_daily_chart_data,
+    :week => coin.snapshot_weekly_chart_data,
+    :month => coin.snapshot_monthly_chart_data,
+    :year => coin.snapshot_yearly_chart_data
+  } rescue coin.chart_data
+  #
+  # social_chart_data = {
+  #   :day => coin.snapshot_daily_social_data,
+  #   :week => coin.snapshot_weekly_social_data,
+  #   :month => coin.snapshot_monthly_social_data,
+  #   :year => coin.snapshot_yearly_social_data
+  # } rescue coin.social_chart_data
+
+  # coin_chart_data = coin.chart_data # coin.chart_data
+
+  %>
+    <div class="coinRow indexCoinRow row" coin-id="<%= coin.id %>">
+      <div class="col-sm-9">
+        <%= render :partial => 'coin_header', :locals => {:coin => coin} %>
+        <div class="row">
+          <%= render :partial => 'price_data', :locals => {:coin => coin} %>
+          <%= render :partial => 'market_cap_data', :locals => {:coin => coin} %>
+          <%= render :partial => 'volume_data', :locals => {:coin => coin} %>
+          <%= render :partial => 'social_data', :locals => {:coin => coin} %>
+        </div>
+      </div>
+
+      <div id="indexChartList" class="coinListCharts col-sm-3">
+        <ul class="nav nav-tabs navbar-left d-flex d-inline-flex chart-tabs">
+          <li class="active d-inline-flex align-items-center"><a href="#" class="default-tab" data-target="#coin-day-graph<%= coin.id %>" data-toggle="tab">Day</a></li>
+          <li class="d-inline-flex align-items-center"><a href="#" data-target="#coin-week-graph<%= coin.id %>" data-toggle="tab">Week</a></li>
+          <li class="d-inline-flex align-items-center"><a href="#" data-target="#coin-month-graph<%= coin.id %>" data-toggle="tab">Month</a></li>
+          <li class="d-inline-flex align-items-center"><a href="#" data-target="#coin-year-graph<%= coin.id %>" data-toggle="tab">Year</a></li>
+        </ul>
+        <div class="tab-content">
+          <% ["day", "week", "month", "year"].each do |chart| %>
+
+            <%= render :partial => 'chart', :locals => {:coin => coin, :coin_chart_data => coin_chart_data, :chart => chart, :is_active_class => "#{"active" if chart == 'day'}"}%>
+            <!-- <div id="chart<%= coin.id %>-<%=chart%>" class="chart-tab tab-pane fade in <%= chart=="day" ? "active" : "" %>"></div> -->
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+  <% end %>
