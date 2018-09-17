@@ -37,7 +37,7 @@ module Cryptopredict
         TwitterStreamWorker.set(:queue => "streamer_worker").perform_async unless Rails.env.development?
         RedditPostStreamWorker.set(:queue => "streamer_worker").perform_async unless Rails.env.development?
         RedditCommentStreamWorker.set(:queue => "streamer_worker").perform_async unless Rails.env.development?
-        NewsStreamWorker.set(:queue => "streamer_worker").perform_async unless Rails.env.development?
+        # NewsStreamWorker.set(:queue => "streamer_worker").perform_async unless Rails.env.development?
       end
     end
 
